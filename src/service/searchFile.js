@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { googleDriveAuth } from "../auth/googleAuth.js";
 
 const searchAndDownloadFile = async (fileId, fileName) => {
-	console.log("pepa pig");
+	console.log("aqui");
 	const service = google.drive({ version: "v3", auth: googleDriveAuth });
 
 	try {
@@ -11,7 +11,7 @@ const searchAndDownloadFile = async (fileId, fileName) => {
 			{ fileId, alt: "media" },
 			{ responseType: "stream" }
 		);
-		console.log("popo pog");
+		console.log("chegou??");
 
 		// Step 2: Crie um stream para salvar o arquivo
 		const dest = fs.createWriteStream(fileName);
