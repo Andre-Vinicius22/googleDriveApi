@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import keys from "../keys.js"; // credenciais da API
+import keys from "./keys.js"; // credenciais da API
 
 export const googleDriveAuth = google.drive({
 	version: "v3",
