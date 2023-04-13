@@ -1,7 +1,3 @@
-/**
- * Search file in drive location
- * @return{obj} data file
- * */
 import { google } from "googleapis";
 import { googleDriveAuth } from "../auth/googleAuth.js";
 
@@ -12,18 +8,19 @@ const searchFile = async () => {
   const service = google.drive({ version: "v3", googleDriveAuth });
   const files = [];
   try {
-    const res = async () => {
-      await service.files.list({
-        q: "application/vnd.google-apps.folder",
-        fields: "nextPageToken, files(id, name)",
-        spaces: "drive",
-      });
-    };
-    Array.prototype.push.apply(files, res.files);
-    res.data.files.forEach(function (file) {
-      console.log("Found file:", file.name, file.id);
+    const res = await service.files.list({
+      q: "mimeType='application/vnd.google-apps.folder'",
+      fields: "nextPageToken, files(id, name)",
+      spaces: "drive",
     });
-    return res.data.files;
+
+    const fileList = res.data.files;
+    fileList.forEach(function (file) {
+      console.log("Found file:", file.name, file.id);
+      files.push(file);
+    });
+
+    return fileList;
   } catch (err) {
     // TODO(developer) - Handle error
     console.log(err.message);

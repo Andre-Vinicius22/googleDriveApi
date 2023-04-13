@@ -6,7 +6,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-	res.status(200).send("Work's!!");
+  res.status(200).send("Work's!!");
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
 
 app.listen(port, () => console.log(`Server ON - http://localhost:${port}`));
