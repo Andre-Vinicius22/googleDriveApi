@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { googleDriveAuth } from "../auth/googleAuth.js";
+import { googleDriveAuth } from "./auth/googleAuth.js";
 
 const searchFile = async () => {
   // Get credentials and build service
@@ -7,6 +7,7 @@ const searchFile = async () => {
 
   const service = google.drive({ version: "v3", googleDriveAuth });
   const files = [];
+
   try {
     const res = await service.files.list({
       q: "mimeType='application/vnd.google-apps.folder'",
