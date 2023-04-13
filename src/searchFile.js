@@ -1,31 +1,47 @@
 import { google } from "googleapis";
 import { googleDriveAuth } from "./auth/googleAuth.js";
 
-const searchFile = async () => {
-	// Get credentials and build service
-	// TODO (developer) - Use appropriate auth mechanism for your app
+const searchAndDownloadFile = async (fileId, fileName) => {
+  const service = google.drive({ version: "v3", auth: googleDriveAuth });
 
-	const service = google.drive({ version: "v3", auth: googleDriveAuth }); // Correção aqui
-	const files = [];
+  try {
+    // Step 1: Busque o arquivo pelo ID
+    const res = await service.files.get(
+      { fileId, alt: "media" },
+      { responseType: "stream" }
+    );
 
-	try {
-		const res = await service.files.list({
-			q: "mimeType='application/vnd.google-apps.folder'",
-			fields: "nextPageToken, files(id, name)",
-			spaces: "drive",
-		});
+    // Step 2: Crie um stream para salvar o arquivo
+    const dest = fs.createWriteStream(fileName);
 
-		const fileList = res.data.files;
-		fileList.forEach(function (file) {
-			console.log("Found file:", file.name, file.id);
-			files.push(file);
-		});
-
-		return fileList;
-	} catch (err) {
-		// TODO(developer) - Handle error
-		console.log(err.message);
-	}
+    // Step 3: Espera o stream terminar de gravar
+    await new Promise((resolve, reject) => {
+      let progress = 0;
+      res.data
+        .on("end", () => {
+          console.log(`Download concluído ${fileName}.`);
+          resolve();
+        })
+        .on("error", (err) => {
+          console.log(`Erro no download ${fileName}.`);
+          reject(err);
+        })
+        .on("data", (d) => {
+          progress += d.length;
+          if (process.stdout.isTTY) {
+            process.stdout.clearLine();
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Download ${fileName}: ${progress} bytes`);
+          }
+        })
+        .pipe(dest);
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
-export default searchFile;
+//searchAndDownloadFile: async (fileId, fileName) => {
+// return await searchAndDownloadFile(fileId, fileName);
+
+export default searchAndDownloadFile;
