@@ -1,8 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
-import process from "process";
 import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
+
 
 const SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"];
 const TOKEN_PATH = path.join(process.cwd(), "token.json");
@@ -47,6 +47,7 @@ async function authorize() {
 }
 
 async function listFiles(authClient) {
+	console.log('Aqui')
 	const drive = google.drive({ version: "v3", auth: authClient });
 	const res = await drive.files.list({
 		pageSize: 10,
@@ -74,4 +75,17 @@ async function listFiles(authClient) {
 	);
 }
 
-authorize().then(listFiles).catch(console.error);
+const getFolders = async () => {
+	try {
+		let auth = await authorize();
+		await listFiles(auth);
+		if(listFiles){
+			return listFiles;
+		}
+	  } catch (error) {
+		console.error(error);
+	  }	  
+}
+
+getFolders();
+//authorize().then(listFiles).catch(console.error);

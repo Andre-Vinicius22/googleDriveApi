@@ -6,17 +6,13 @@ const searchAndDownloadFile = async (fileId, fileName) => {
 	const service = google.drive({ version: "v3", auth: googleDriveAuth });
 
 	try {
-		// Step 1: Busque o arquivo pelo ID
 		const res = await service.files.get(
 			{ fileId, alt: "media" },
 			{ responseType: "stream" }
 		);
 		console.log("chegou??");
 
-		// Step 2: Crie um stream para salvar o arquivo
 		const dest = fs.createWriteStream(fileName);
-
-		// Step 3: Espera o stream terminar de gravar
 		await new Promise((resolve, reject) => {
 			let progress = 0;
 			res.data
