@@ -7,6 +7,6 @@ routes.get("/", (req, res) => {
 	res.status(200).send("Work's!!");
 });
 
-routes.get("/files", fileController.foundFile);
+routes.get("/files", fileController.filePath);
 
 export default routes;
