@@ -4,9 +4,9 @@ import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 
 const SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"];
-const TOKEN_PATH = path.join(process.cwd(), "token.json");
+const TOKEN_PATH = path.join("/home/aline/Área de Trabalho/googleDriveApi/googleDriveApi/src/resource/", "token.json");
 const CREDENTIALS_PATH = path.join(
-	"C:/Users/vinic/OneDrive/Documentos/Able_GoldenChance/Projetos/googleDriveApi/src/resource/",
+	"/home/aline/Área de Trabalho/googleDriveApi/googleDriveApi/src/resource/",
 	"credentials.json"
 );
 
@@ -49,7 +49,6 @@ async function authorize() {
 }
 
 async function listFiles(authClient) {
-	console.log(authClient);
 	const drive = google.drive({ version: "v3", auth: authClient });
 	const res = await drive.files.list({
 		pageSize: 10,
@@ -63,24 +62,26 @@ async function listFiles(authClient) {
 	}
 
 	console.log("Files:");
-	Promise.all(
-		files.map(async (file) => {
-			// console.log(`${file.name} (${file.id})`);
+	const getFileParentNames = async (files) => {
+		const arq = files.map(async (file) => {
 			if (file.parents && file.parents.length) {
-				const fileName = await drive.files.get({
-					fileId: file.parents[0],
-					fields: "id, name, parents",
-				});
+			  const fileName = await drive.files.get({
+				fileId: file.parents[0],
+				fields: "id, name, parents",
+			});
 				console.log(`${fileName.data.name}/${file.name}`);
+			   //return file.name;
 			}
-		})
-	);
+		  	})
+		  //return await arq;
+		  Promise.all(arq);
+	  };
+	getFileParentNames(files);
 }
 
-const getFolders = async () => {
+const getFilePath = async () => {
 	try {
 		let auth = await authorize();
-		console.log(auth);
 		const files = await listFiles(auth);
 		if (files) {
 			return files;
@@ -90,5 +91,5 @@ const getFolders = async () => {
 	}
 };
 
-export default getFolders();
+export default getFilePath;
 //authorize().then(listFiles).catch(console.error);

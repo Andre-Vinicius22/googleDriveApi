@@ -1,12 +1,13 @@
-import getFolders from "../resource/getFolders.js";
+import getFilePath from "../resource/getFilePath.js";
 
 const fileService = {
 	filePath: async () => {
 		console.log("chegou aq pirraia");
 		const path = async () => {
-			return [await getFolders()];
+			return await getFilePath();
 		};
-		return Promise.all([path]);
+		path();
+		//console.log(path);
 	},
 };
 
