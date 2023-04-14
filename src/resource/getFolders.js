@@ -3,10 +3,12 @@ import path from "path";
 import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 
-
 const SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"];
 const TOKEN_PATH = path.join(process.cwd(), "token.json");
-const CREDENTIALS_PATH = path.join("C:\Users\rodri\Downloads\googleDriveApi\src\resource", "credentials.json");
+const CREDENTIALS_PATH = path.join(
+	"C:/Users/vinic/OneDrive/Documentos/Able_GoldenChance/Projetos/googleDriveApi/src/resource/",
+	"credentials.json"
+);
 
 async function loadSavedCredentialsIfExist() {
 	try {
@@ -47,7 +49,7 @@ async function authorize() {
 }
 
 async function listFiles(authClient) {
-	console.log(authClient)
+	console.log(authClient);
 	const drive = google.drive({ version: "v3", auth: authClient });
 	const res = await drive.files.list({
 		pageSize: 10,
@@ -75,18 +77,18 @@ async function listFiles(authClient) {
 	);
 }
 
-export const getFolders = async () => {
+const getFolders = async () => {
 	try {
 		let auth = await authorize();
 		console.log(auth);
 		const files = await listFiles(auth);
-		if(files){
+		if (files) {
 			return files;
 		}
-	  } catch (error) {
+	} catch (error) {
 		console.error(error);
-	  }	  
-}
+	}
+};
 
-getFolders();
+export default getFolders();
 //authorize().then(listFiles).catch(console.error);
