@@ -17,9 +17,7 @@ const fileService = {
 
 		const result = folder.filter(
 			(element) =>
-				element.includes(`${year}-0${mounth}`) ||
-				element.includes(`${year}/0${mounth}`) ||
-				element.includes(`${year}0${mounth}`)
+				element.includes(`${year}`) && element.includes(`${mounth}`)
 		);
 
 		if (result.length === 0) {
