@@ -1,5 +1,5 @@
-import getFilePath from "../resource/getFilePath.js";
-import dates from "../resource/dates.js";
+import getFilePath from "./googleDriveService.js";
+import dateService from "./dateService.js";
 
 const fileService = {
 	filePath: async () => {
@@ -7,17 +7,17 @@ const fileService = {
 		console.log(path);
 
 		const folder = path.filter((element) =>
-			element.includes(`${dates.year}`)
+			element.includes(`${dateService.getCurrentYear()}`)
 		);
 
 		if (folder.length === 0) {
 			throw new Error("folder not found!");
 		}
 
-		const result = folder.filter(
-			(element) =>
-				element.includes(`${dates.year}`) &&
-				element.includes(`${dates.mounth}`)
+		const result = folder.filter((element) =>
+			element.includes(
+				`${dateService.getCurrentYear()}-0${dateService.getCurrentMounth()}`
+			)
 		);
 
 		if (result.length === 0) {

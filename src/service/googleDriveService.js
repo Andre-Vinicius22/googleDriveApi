@@ -87,4 +87,3 @@ const getFilePath = async () => {
 };
 
 export default getFilePath;
-//authorize().then(listFiles).catch(console.error);
