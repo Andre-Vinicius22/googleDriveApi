@@ -2,7 +2,15 @@ import getFilePath from "../resource/getFilePath.js";
 
 const fileService = {
 	filePath: async () => {
-		const result = await getFilePath();
+		const path = await getFilePath();
+		const result = path.filter((element) => {
+			if(element.includes("nota_2023-03.pdf")) {
+				return element
+			}
+		})
+			if(result.length === 0){
+				throw new Error ("note not found!")
+		}
 		return result;
 	},
 };
