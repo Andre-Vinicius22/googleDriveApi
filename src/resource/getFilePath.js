@@ -57,23 +57,21 @@ async function listFiles(authClient) {
 		console.log("No files found.");
 		return;
 	}
-
-	console.log("Files:");
+	// console.log("Files:");
 	const getFileParentNames = async (files) => {
-		const arq = files.map(async (file) => {
+		const path = files.map(async (file) => {
 			if (file.parents && file.parents.length) {
 				const fileName = await drive.files.get({
 					fileId: file.parents[0],
 					fields: "id, name, parents",
 				});
-				console.log(`${fileName.data.name}/${file.name}`);
-				//return file.name;
+				return `${fileName.data.name}/${file.name}`;
 			}
 		});
-		//return await arq;
-		Promise.all(arq);
+		const result = await Promise.all(path);
+		return result;
 	};
-	getFileParentNames(files);
+	return getFileParentNames(files);
 }
 
 const getFilePath = async () => {
