@@ -4,11 +4,8 @@ import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 
 const SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"];
-const TOKEN_PATH = path.join("/home/aline/Área de Trabalho/googleDriveApi/googleDriveApi/src/resource/", "token.json");
-const CREDENTIALS_PATH = path.join(
-	"/home/aline/Área de Trabalho/googleDriveApi/googleDriveApi/src/resource/",
-	"credentials.json"
-);
+const TOKEN_PATH = path.join("./src/resource/", "token.json");
+const CREDENTIALS_PATH = path.join("./src/resource/", "credentials.json");
 
 async function loadSavedCredentialsIfExist() {
 	try {
@@ -65,17 +62,17 @@ async function listFiles(authClient) {
 	const getFileParentNames = async (files) => {
 		const arq = files.map(async (file) => {
 			if (file.parents && file.parents.length) {
-			  const fileName = await drive.files.get({
-				fileId: file.parents[0],
-				fields: "id, name, parents",
-			});
+				const fileName = await drive.files.get({
+					fileId: file.parents[0],
+					fields: "id, name, parents",
+				});
 				console.log(`${fileName.data.name}/${file.name}`);
-			   //return file.name;
+				//return file.name;
 			}
-		  	})
-		  //return await arq;
-		  Promise.all(arq);
-	  };
+		});
+		//return await arq;
+		Promise.all(arq);
+	};
 	getFileParentNames(files);
 }
 
