@@ -1,5 +1,5 @@
 import { Router } from "express";
-import fileController from "./controller/fileController.js";
+import userController from "./controller/userController.js";
 
 const routes = Router();
 
@@ -7,6 +7,6 @@ routes.get("/", (req, res) => {
 	res.status(200).send("Work's!!");
 });
 
-routes.get("/files", fileController.getfiscalNotePath);
+routes.get("/files", userController.getfiscalNotePath);
 
 export default routes;
