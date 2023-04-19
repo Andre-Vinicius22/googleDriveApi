@@ -74,16 +74,16 @@ async function listFiles(authClient) {
 	return getFileParentNames(files);
 }
 
-const getFilePath = async () => {
+const getAuthFilePath = async () => {
 	try {
-		let auth = await authorize();
-		const files = await listFiles(auth);
-		if (files) {
-			return files;
+		const auth = await authorize();
+		const filePath = await listFiles(auth);
+		if (filePath) {
+			return filePath;
 		}
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export default getFilePath;
+export default getAuthFilePath;

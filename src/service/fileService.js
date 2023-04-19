@@ -1,30 +1,33 @@
-import getFilePath from "./googleDriveService.js";
+import getAuthFilePath from "./googleDriveService.js";
 import dateService from "./dateService.js";
 
 const fileService = {
-	filePath: async () => {
-		const path = await getFilePath();
-		console.log(path);
+	getFilePath: async () => {
+		const filePath = await getAuthFilePath();
+		console.log(filePath);
 
-		const folder = path.filter((element) =>
-			element.includes(`${dateService.getCurrentYear()}`)
+		const verifyExtention =  /\.[^./\s]+$/g;
+		
+		const folderPath = filePath.filter((element) => 
+			element.includes(`${dateService.getCurrentYear()}`) && !verifyExtention.exec(element)
 		);
 
-		if (folder.length === 0) {
+		if (folderPath.length === 0) {
 			throw new Error("folder not found!");
 		}
-
-		const result = folder.filter((element) =>
+		
+		const fiscalNotePath = folderPath.filter((element) =>
 			element.includes(
 				`${dateService.getCurrentYear()}-0${dateService.getCurrentMounth()}`
 			)
 		);
 
-		if (result.length === 0) {
+		
+		if (fiscalNotePath.length === 0) {
 			throw new Error("note not found!");
 		}
 
-		return result;
+		return fiscalNotePath;
 	},
 };
 
