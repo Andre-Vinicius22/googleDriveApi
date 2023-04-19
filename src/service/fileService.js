@@ -2,7 +2,7 @@ import getAuthFilePath from "./googleDriveService.js";
 import dateService from "./dateService.js";
 
 const fileService = {
-	getFilePath: async () => {
+	getfiscalNotePath: async () => {
 		const filePath = await getAuthFilePath();
 		console.log(filePath);
 

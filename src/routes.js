@@ -7,6 +7,6 @@ routes.get("/", (req, res) => {
 	res.status(200).send("Work's!!");
 });
 
-routes.get("/files", fileController.filePath);
+routes.get("/files", fileController.getfiscalNotePath);
 
 export default routes;
