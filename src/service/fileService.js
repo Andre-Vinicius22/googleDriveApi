@@ -4,7 +4,6 @@ import dateService from "./dateService.js";
 const fileService = {
 	getfiscalNotePath: async () => {
 		const filePath = await getAuthFilePath();
-		console.log(filePath);
 
 		// const verifyExtention = /\.[^./\s]+$/g;
 		const folderPath = filePath.filter((element) =>

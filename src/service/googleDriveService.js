@@ -57,7 +57,7 @@ async function listFiles(authClient) {
 		console.log("No files found.");
 		return;
 	}
-	console.log("Files:");
+	// console.log("Files:");
 	const getFileParentNames = async (files) => {
 		const path = files.map(async (file) => {
 			if (file.parents && file.parents.length) {
