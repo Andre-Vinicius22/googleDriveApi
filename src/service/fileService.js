@@ -2,51 +2,40 @@ import googleDriveApi from "./googleDriveService.js";
 import dateService from "./dateService.js";
 
 const fileService = {
-	getfiscalNotePath: async () => {
-		const filePath = await googleDriveApi();
+  getReceveidFiscalNote: async () => {
+    const filePath = await googleDriveApi();
 
-		// console.log(filePath);
-		// const folderPath = filePath.filter((element) =>
-		// 	element.includes(`${dateService.getCurrentYear()}`)
-		// );
+    const DEV = "[DEV]";
+    const regex = new RegExp(DEV, "g");
+    const devFolder = filePath.filter((element) => regex.test(element));
 
-		// if (folderPath.length === 0) {
-		// 	throw new Error("folder not found!");
-		// }
+    const devPath = devFolder.map((str) => str.replace("Meu Drive/", ""));
 
-		const DEV = "[DEV]";
-		const regex = new RegExp(DEV, "g");
-		const devFolder = filePath.filter((element) => regex.test(element));
+    const currentMounth = dateService.getCurrentMounth();
 
-		const devPath = devFolder.map((str) => str.replace("Meu Drive/", ""));
+    const formatedMounth =
+      currentMounth < 10 ? `0${currentMounth}` : currentMounth;
 
-		const currentMounth = dateService.getCurrentMounth();
+    const noteExists = devPath.filter((element) =>
+      element.includes(`${dateService.getCurrentYear()}-${formatedMounth}`)
+    );
 
-		const formatedMounth =
-			currentMounth < 10 ? `0${currentMounth}` : currentMounth;
+    if (noteExists.length === 0) {
+      throw new Error("note not found!");
+    }
 
-		const noteExists = devPath.filter((element) =>
-			element.includes(
-				`${dateService.getCurrentYear()}-${formatedMounth}`
-			)
-		);
+    const receivedNote = noteExists.map((item) => {
+      let [name, file] = item.split("/");
+      if (file) {
+        file = true;
+      } else {
+        file = false;
+      }
+      return { name, file };
+    });
 
-		if (noteExists.length === 0) {
-			throw new Error("note not found!");
-		}
-
-		const receivedNote = noteExists.map((item) => {
-			let [name, file] = item.split("/");
-			if (file) {
-				file = true;
-			} else {
-				file = false;
-			}
-			return { name, file };
-		});
-
-		return receivedNote;
-	},
+    return receivedNote;
+  },
 };
 
 export default fileService;
