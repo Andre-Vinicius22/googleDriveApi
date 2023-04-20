@@ -1,9 +1,10 @@
-import getAuthFilePath from "./googleDriveService.js";
+import googleDriveApi from "./googleDriveService.js";
 import dateService from "./dateService.js";
 
 const fileService = {
 	getfiscalNotePath: async () => {
-		const filePath = await getAuthFilePath();
+		const filePath = await googleDriveApi();
+		console.log(filePath);
 		const folderPath = filePath.filter((element) =>
 			element.includes(`${dateService.getCurrentYear()}`)
 		);

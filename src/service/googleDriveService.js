@@ -57,7 +57,7 @@ async function listFiles(authClient) {
 		console.log("No files found.");
 		return;
 	}
-	// console.log("Files:");
+	console.log("Files:");
 	const getFileParentNames = async (files) => {
 		const path = files.map(async (file) => {
 			if (file.parents && file.parents.length) {
@@ -68,22 +68,33 @@ async function listFiles(authClient) {
 				return `${fileName.data.name}/${file.name}`;
 			}
 		});
-		const result = await Promise.all(path);
+		let result = await Promise.all(path);
 		return result;
 	};
 	return getFileParentNames(files);
 }
 
-const getAuthFilePath = async () => {
+const googleDriveApi = async () => {
 	try {
 		const auth = await authorize();
 		const filePath = await listFiles(auth);
 		if (filePath) {
-			return filePath;
+			const MEU_DRIVE = "Meu Drive";
+			const regex = new RegExp(MEU_DRIVE, "g");
+
+			const result = filePath.sort((a, b) => {
+				const aCount = (a.match(regex) || []).length;
+				const bCount = (b.match(regex) || []).length;
+
+				return bCount - aCount;
+			});
+
+			// console.log(result);
+			return result;
 		}
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export default getAuthFilePath;
+export default googleDriveApi;
