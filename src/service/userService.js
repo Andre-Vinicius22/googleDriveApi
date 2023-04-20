@@ -1,9 +1,13 @@
 import fileService from "./fileService.js";
 
 const userService = {
-	getfiscalNotePath: async () => {
+	getAllFiscalNotePath: async () => {
 		const fiscalNotePath = await fileService.getfiscalNotePath();
-		return fiscalNotePath;
+		const obj = fiscalNotePath.map((item) => {
+			const [name, file] = item.split("/");
+			return { name, file };
+		});
+		return obj;
 	},
 };
 
