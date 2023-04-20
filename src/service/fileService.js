@@ -2,40 +2,35 @@ import googleDriveApi from "./googleDriveService.js";
 import dateService from "./dateService.js";
 
 const fileService = {
-  getReceveidFiscalNote: async () => {
-    const filePath = await googleDriveApi();
+	getReceveidFiscalNote: async () => {
+		const filePath = await googleDriveApi();
 
-    const DEV = "[DEV]";
-    const regex = new RegExp(DEV, "g");
-    const devFolder = filePath.filter((element) => regex.test(element));
+		const DEV = "[DEV]";
+		const regex = new RegExp(DEV, "g");
+		const devFolder = filePath.filter((element) => regex.test(element));
 
-    const devPath = devFolder.map((str) => str.replace("Meu Drive/", ""));
+		const devPath = devFolder.map((str) => str.replace("Meu Drive/", ""));
 
-    const currentMounth = dateService.getCurrentMounth();
+		const currentMounth = dateService.getCurrentMounth();
 
-    const formatedMounth =
-      currentMounth < 10 ? `0${currentMounth}` : currentMounth;
+		const formatedMounth =
+			currentMounth < 10 ? `0${currentMounth}` : currentMounth;
 
-    const noteExists = devPath.filter((element) =>
-      element.includes(`${dateService.getCurrentYear()}-${formatedMounth}`)
-    );
-
-    if (noteExists.length === 0) {
-      throw new Error("note not found!");
-    }
-
-    const receivedNote = noteExists.map((item) => {
-      let [name, file] = item.split("/");
-      if (file) {
-        file = true;
-      } else {
-        file = false;
-      }
-      return { name, file };
-    });
-
-    return receivedNote;
-  },
+		const noteExists = devPath.map((element) => {
+			let [name, file] = element.split("/");
+			if (
+				element.includes(
+					`${dateService.getCurrentYear()}-${formatedMounth}`
+				)
+			) {
+				file = true;
+			} else {
+				file = false;
+			}
+			return { name, file };
+		});
+		return noteExists;
+	},
 };
 
 export default fileService;
